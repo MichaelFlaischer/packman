@@ -1,19 +1,13 @@
 'use strict'
 
-const GHOST = {
-  img: 'icons/ghost.png',
-}
-
 var gGhosts = []
-
+var gNextId = 0
 var gIntervalGhosts
-var stackImg = ['icons/redGhost.png', 'icons/yelloGhost.png', 'icons/blueGhost.png']
 
-function createGhosts(board) {
+function createGhosts(board, count) {
   gGhosts = []
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < count; i++) {
     createGhost(board)
-    gGhosts[i].id = i
   }
 
   if (gIntervalGhosts) clearInterval(gIntervalGhosts)
@@ -21,9 +15,18 @@ function createGhosts(board) {
 }
 
 function createGhost(board) {
-  var loc = getEmptyCell()
-  console.log(loc)
-  const ghost = { id: 0, location: { i: 2, j: 8 }, currCellContent: FOOD, img: stackImg.pop(), imgSuper: 'icons/whiteGhost.png', class: 'ghost' }
+  var ghostLocation = getEmptyCell()
+  var randColor = Math.floor(Math.random() * 360 + 1)
+  const ghost = {
+    id: gNextId,
+    location: { i: ghostLocation.i, j: ghostLocation.j },
+    currCellContent: EMPTY,
+    img: 'icons/ghost.png',
+    imgSuper: 'icons/whiteGhost.png',
+    class: 'ghost',
+    color: randColor,
+  }
+  gNextId++
   gGhosts.push(ghost)
   board[ghost.location.i][ghost.location.j] = ghost
 }
@@ -47,24 +50,60 @@ function moveGhost(ghost) {
     moveGhost(ghost)
     return
   }
-  if (nextCell === GHOST) {
+  if (nextCell.class === 'ghost') {
     moveGhost(ghost)
     return
   }
   if (nextCell === PACMAN) {
-    if (!PACMAN.isSuper) gameOver()
-    else {
+    if (!PACMAN.isSuper) {
+      gameOver()
+      return
+    } else {
+      for (var i = 0; i < gGhosts.length; i++) {
+        if (gGhosts[i].id === ghost.id) {
+          gBoard[ghost.location.i][ghost.location.j] = ghost.currCellContent
+          var percentSize = cellContent === FOOD ? 40 : 100
+
+          renderCell(
+            ghost.location,
+            `<img class ="${ghost.currCellContent.class}" src="${ghost.currCellContent.img}" alt="${ghost.currCellContent.class}" width="${percentSize}%" height="${percentSize}%";">`
+          )
+
+          gGhosts.splice(i, 1)
+          setTimeout(() => {
+            createGhost(gBoard)
+          }, 3000)
+          return
+        }
+      }
     }
-    // gameOver()
-    return
   }
 
+  var percentSize = ghost.currCellContent === FOOD ? 40 : 100
+
   gBoard[ghost.location.i][ghost.location.j] = ghost.currCellContent
-  renderCell(ghost.location, ghost.currCellContent.img)
+
+  renderCell(
+    ghost.location,
+    `<img class ="${ghost.currCellContent.class}" src="${ghost.currCellContent.img}" alt="${ghost.currCellContent.class}" width="${percentSize}%" height="${percentSize}%";">`
+  )
+
+  ghost.currCellContent = nextCell
 
   ghost.location = nextLocation
-  ghost.currCellContent = nextCell
-  gBoard[nextLocation.i][nextLocation.j] = GHOST
+  gBoard[nextLocation.i][nextLocation.j] = ghost
+
+  if (PACMAN.isSuper) {
+    renderCell(
+      ghost.location,
+      `<img class ="${ghost.class}" src="${ghost.imgSuper}" alt="${ghost.class}" width="100%" height="100%" style="filter: hue-rotate(${ghost.color}deg);">`
+    )
+  } else {
+    renderCell(
+      ghost.location,
+      `<img class ="${ghost.class}" src="${ghost.img}" alt="${ghost.class}" width="100%" height="100%" style="filter: hue-rotate(${ghost.color}deg);">`
+    )
+  }
 }
 
 function getMoveDiff() {

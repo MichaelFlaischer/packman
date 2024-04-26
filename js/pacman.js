@@ -22,17 +22,30 @@ function onMovePacman(ev) {
   const nextCell = gBoard[nextLocation.i][nextLocation.j]
 
   if (nextCell === WALL) return
-  if (nextCell === GHOST) {
+  if (nextCell.class === 'ghost') {
     if (!PACMAN.isSuper) gameOver()
     else {
-      console.log(nextCell)
+      for (var i = 0; i < gGhosts.length; i++) {
+        if (gGhosts[i].id === nextCell.id) {
+          gBoard[nextLocation.i][nextLocation.j] = nextCell.currCellContent
+          gGhosts.splice(i, 1)
+
+          setTimeout(() => {
+            createGhost(gBoard)
+          }, 3000)
+        }
+      }
     }
-    return
   }
   if (nextCell === SUPERFOOD) {
     if (PACMAN.isSuper === true) return
     PACMAN.isSuper = true
-
+    for (var i = 0; i < gGhosts.length; i++) {
+      renderCell(
+        gGhosts[i].location,
+        `<img class ="${gGhosts[i].class}" src="${gGhosts[i].imgSuper}" alt="${gGhosts[i].class}" width="100%" height="100%" style="filter: hue-rotate(${gGhosts[i].color}deg);">`
+      )
+    }
     toggleSuperMode()
     setTimeout(() => {
       PACMAN.isSuper = false

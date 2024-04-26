@@ -29,5 +29,4 @@ body {
 }
 .rotateLeft {
   transform: rotate(0deg) scaleX(-1);
-  filter: hue-rotate(132deg);
 }

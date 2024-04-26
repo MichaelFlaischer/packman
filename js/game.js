@@ -16,19 +16,30 @@ var gIntervalFood
 
 function onInit() {
   gBoard = buildBoard()
-  createPacman(gBoard)
-  // createGhosts(gBoard)
 }
 
 function startGame() {
+  createPacman(gBoard)
   renderBoard(gBoard)
   crateFoods(10)
+  createGhosts(gBoard, 3)
   gGame.score = 0
   gGame.isOn = true
   gIntervalSuperFood = setInterval(crateSuperFood, 15000)
   gIntervalFood = setInterval(crateFood, 2000)
 }
-function restartGame() {}
+function restartGame() {
+  gGhosts = []
+  gNextId = 0
+  clearInterval(gIntervalGhosts)
+  clearInterval(gIntervalSuperFood)
+  clearInterval(gIntervalFood)
+  PACMAN = null
+  gGame.score = 0
+  gGame.isOn = false
+  onInit()
+  startGame()
+}
 
 function buildBoard() {
   const size = 10
@@ -79,11 +90,15 @@ function gameOver() {
   clearInterval(gIntervalFood)
   clearInterval(gIntervalSuperFood)
   gGame.isOn = false
+  const elBtnStart = document.querySelector('.startBtn')
+  elBtnStart.innerText = 'Play Again!'
+
   const elBoard = document.querySelector('.board')
-  var strHTML = ''
-  if (!isFoodIngame()) strHTML = '<div>Victory!!</div> <button onclick="restartGame()">play again!</button>'
-  else strHTML = '<div>game over!</div> <button onclick="restartGame()">play again!</button>'
-  elBoard.innerHTML = strHTML
+  if (!isFoodIngame()) {
+    elBoard.innerHTML = '<div>Victory!!</div>'
+  } else {
+    elBoard.innerHTML = '<div>Game Over!</div>'
+  }
 }
 
 function isFoodIngame() {
