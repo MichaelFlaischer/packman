@@ -13,3 +13,21 @@ body {
   width: 2em;
   height: 2em;
 }
+
+.superFoodActive {
+  src: 'icons/whiteGhost.png';
+}
+
+.rotateDown {
+  transform: rotate(90deg);
+}
+.rotateRight {
+  transform: rotate(0deg);
+}
+.rotateUp {
+  transform: rotate(-90deg);
+}
+.rotateLeft {
+  transform: rotate(0deg) scaleX(-1);
+  filter: hue-rotate(132deg);
+}

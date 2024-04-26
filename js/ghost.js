@@ -23,7 +23,7 @@ function createGhosts(board) {
 function createGhost(board) {
   var loc = getEmptyCell()
   console.log(loc)
-  const ghost = { id: 0, location: { i: 2, j: 8 }, currCellContent: FOOD, img: stackImg.pop(), imgSuper: 'icons/whiteGhost.png' }
+  const ghost = { id: 0, location: { i: 2, j: 8 }, currCellContent: FOOD, img: stackImg.pop(), imgSuper: 'icons/whiteGhost.png', class: 'ghost' }
   gGhosts.push(ghost)
   board[ghost.location.i][ghost.location.j] = ghost
 }
@@ -65,8 +65,6 @@ function moveGhost(ghost) {
   ghost.location = nextLocation
   ghost.currCellContent = nextCell
   gBoard[nextLocation.i][nextLocation.j] = GHOST
-  if (PACMAN.isSuper) renderCell(ghost.location, ghost.imgSuper)
-  else renderCell(ghost.location, ghost.img)
 }
 
 function getMoveDiff() {
@@ -81,5 +79,12 @@ function getMoveDiff() {
       return { i: 0, j: -1 }
     case 4:
       return { i: -1, j: 0 }
+  }
+}
+
+function toggleSuperMode() {
+  var ghosts = document.querySelectorAll('ghost')
+  for (var i = 0; i < ghosts.length; i++) {
+    ghosts[i].classList.toggle('superFoodActive')
   }
 }

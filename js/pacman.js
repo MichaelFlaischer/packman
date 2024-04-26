@@ -3,13 +3,15 @@
 var PACMAN
 
 function createPacman(board) {
+  var randLocation = getEmptyCell()
   PACMAN = {
     location: {
-      i: 2,
-      j: 2,
+      i: randLocation.i,
+      j: randLocation.j,
     },
     isSuper: false,
     img: 'icons/pacman.png',
+    class: 'pacman',
   }
   board[PACMAN.location.i][PACMAN.location.j] = PACMAN
 }
@@ -25,24 +27,27 @@ function onMovePacman(ev) {
     else {
       console.log(nextCell)
     }
-    // gameOver()
     return
   }
   if (nextCell === SUPERFOOD) {
     if (PACMAN.isSuper === true) return
     PACMAN.isSuper = true
 
+    toggleSuperMode()
     setTimeout(() => {
       PACMAN.isSuper = false
+      toggleSuperMode()
     }, 5000)
   }
+  var elPacman = document.querySelector('[class*="pacman"]')
 
   gBoard[PACMAN.location.i][PACMAN.location.j] = EMPTY
-  renderCell(PACMAN.location, EMPTY.img)
+  renderCell(PACMAN.location, `<img class ="${EMPTY.class}" src="${EMPTY.img}" alt="${EMPTY.class}" width="100%" height="100%">`)
 
   gBoard[nextLocation.i][nextLocation.j] = PACMAN
   PACMAN.location = nextLocation
-  renderCell(PACMAN.location, PACMAN.img)
+  renderCell(PACMAN.location, `<img class ="${PACMAN.class} ${elPacman.classList[1]}" src="${PACMAN.img}" alt="${PACMAN.class}" width="100%" height="100%">`)
+
   if (nextCell === FOOD) {
     updateScore(1)
     if (!isFoodIngame()) gameOver()
@@ -57,15 +62,37 @@ function getNextLocation(eventKeyboard) {
   switch (eventKeyboard) {
     case 'ArrowUp':
       nextLocation.i--
+      var elPacman = document.querySelector('[class*="pacman"]')
+      elPacman.classList.add('rotateUp')
+      elPacman.classList.remove('rotateDown')
+      elPacman.classList.remove('rotateLeft')
+      elPacman.classList.remove('rotateRight')
       break
     case 'ArrowRight':
       nextLocation.j++
+      var elPacman = document.querySelector('[class*="pacman"]')
+      elPacman.classList.remove('rotateUp')
+      elPacman.classList.remove('rotateDown')
+      elPacman.classList.remove('rotateLeft')
+      elPacman.classList.add('rotateRight')
       break
     case 'ArrowDown':
       nextLocation.i++
+      var elPacman = document.querySelector('[class*="pacman"]')
+      elPacman.classList.remove('rotateUp')
+      elPacman.classList.add('rotateDown')
+      elPacman.classList.remove('rotateLeft')
+      elPacman.classList.remove('rotateRight')
+
       break
     case 'ArrowLeft':
       nextLocation.j--
+      var elPacman = document.querySelector('[class*="pacman"]')
+      elPacman.classList.remove('rotateUp')
+      elPacman.classList.remove('rotateDown')
+      elPacman.classList.add('rotateLeft')
+      elPacman.classList.remove('rotateRight')
+
       break
   }
   return nextLocation
