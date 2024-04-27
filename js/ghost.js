@@ -56,6 +56,8 @@ function moveGhost(ghost) {
   }
   if (nextCell === PACMAN) {
     if (!PACMAN.isSuper) {
+      var gBackGroundAudio = new Audio('sound/pacman_death.wav')
+      gBackGroundAudio.play()
       gameOver()
       return
     } else {
@@ -70,6 +72,8 @@ function moveGhost(ghost) {
           )
 
           gGhosts.splice(i, 1)
+          var gBackGroundAudio = new Audio('sound/pacman_eatghost.wav')
+          gBackGroundAudio.play()
           setTimeout(() => {
             createGhost(gBoard)
           }, 3000)
