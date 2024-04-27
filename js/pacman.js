@@ -12,6 +12,7 @@ function createPacman(board) {
     isSuper: false,
     img: 'icons/pacman.png',
     class: 'pacman',
+    color: 360,
   }
   board[PACMAN.location.i][PACMAN.location.j] = PACMAN
 }
@@ -22,11 +23,13 @@ function onMovePacman(ev) {
   const nextCell = gBoard[nextLocation.i][nextLocation.j]
 
   if (nextCell === WALL) return
+
   if (nextCell.class === 'ghost') {
     if (!PACMAN.isSuper) {
       var gBackGroundAudio = new Audio('sound/pacman_death.wav')
       gBackGroundAudio.play()
       gameOver()
+      return
     } else {
       for (var i = 0; i < gGhosts.length; i++) {
         if (gGhosts[i].id === nextCell.id) {
@@ -73,6 +76,11 @@ function onMovePacman(ev) {
     gBackGroundAudio.play()
     updateScore(1)
     if (!isFoodIngame()) gameOver()
+  }
+  if (nextCell === CHERTY) {
+    var gBackGroundAudio = new Audio('sound/pacman_eatfruit.wav')
+    gBackGroundAudio.play()
+    updateScore(10)
   }
 }
 

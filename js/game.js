@@ -1,9 +1,10 @@
 'use strict'
 
-const WALL = { symbol: '#', img: 'icons/wall.png', class: 'wall' }
-const FOOD = { symbol: '.', img: 'icons/food.png', class: 'food' }
-const EMPTY = { symbol: ' ', img: 'icons/empty.png', class: 'empty' }
-const SUPERFOOD = { symbol: '*', img: 'icons/superFood.png', class: 'superFood' }
+const WALL = { symbol: '#', img: 'icons/wall.png', class: 'wall', color: 360 }
+const FOOD = { symbol: '.', img: 'icons/food.png', class: 'food', color: 360 }
+const CHERTY = { symbol: '%', img: 'icons/cherry.png', class: 'cherry', color: 360 }
+const EMPTY = { symbol: ' ', img: 'icons/empty.png', class: 'empty', color: 360 }
+const SUPERFOOD = { symbol: '*', img: 'icons/superFood.png', class: 'superFood', color: 360 }
 
 const gGame = {
   score: 0,
@@ -13,19 +14,23 @@ const gGame = {
 var gBoard
 var gIntervalSuperFood
 var gIntervalFood
+var gIntervalCherry
+
 function onInit() {
   gBoard = buildBoard()
 }
 
 function startGame() {
   createPacman(gBoard)
+  createGhosts(gBoard, 3)
   renderBoard(gBoard)
   crateFoods(10)
-  createGhosts(gBoard, 3)
+  crateSuperFoodInStart()
   gGame.score = 0
+  updateScore(0)
   gGame.isOn = true
-  gIntervalSuperFood = setInterval(crateSuperFood, 15000)
   gIntervalFood = setInterval(crateFood, 2000)
+  gIntervalCherry = setInterval(crateCherry, 15000)
   var gBackGroundAudio = new Audio('sound/backGround.wav')
   gBackGroundAudio.play()
 }
@@ -33,8 +38,8 @@ function restartGame() {
   gGhosts = []
   gNextId = 0
   clearInterval(gIntervalGhosts)
-  clearInterval(gIntervalSuperFood)
   clearInterval(gIntervalFood)
+  clearInterval(gIntervalCherry)
   PACMAN = null
   gGame.score = 0
   gGame.isOn = false
@@ -43,7 +48,7 @@ function restartGame() {
 }
 
 function buildBoard() {
-  const size = 10
+  const size = 13
   const board = []
 
   for (var i = 0; i < size; i++) {
@@ -64,7 +69,7 @@ function renderBoard(board) {
     strHTML += '<tr>'
     for (var j = 0; j < board[0].length; j++) {
       const className = `cell cell-${i}-${j}`
-      strHTML += `<td class="${className}"><img class ="${board[i][j].class}" src="${board[i][j].img}" alt="img" width="100%" height="100%"></td>`
+      strHTML += `<td class="${className}"><img class ="${board[i][j].class}" src="${board[i][j].img}" alt="${board[i][j].class}" width="100%" height="100%" style="filter: hue-rotate(${board[i][j].color}deg);"></td>`
     }
     strHTML += '</tr>'
   }
@@ -89,7 +94,7 @@ function updateScore(diff) {
 function gameOver() {
   clearInterval(gIntervalGhosts)
   clearInterval(gIntervalFood)
-  clearInterval(gIntervalSuperFood)
+  clearInterval(gIntervalCherry)
   gGame.isOn = false
   const elBtnStart = document.querySelector('.startBtn')
   elBtnStart.innerText = 'Play Again!'
@@ -136,11 +141,14 @@ function crateSuperFood() {
   gBoard[location.i][location.j] = SUPERFOOD
 
   renderCell(location, `<img class ="${SUPERFOOD.class}" src="${SUPERFOOD.img}" alt="${SUPERFOOD.class}" width="100%" height="100%">`)
+}
 
-  //setTimeout(() => {
-  //  if (gBoard[location.i][location.j] === SUPERFOOD) gBoard[location.i][location.j] = EMPTY
-  //  renderCell(location, `<img class ="${EMPTY.class}" src="${EMPTY.img}" alt="${EMPTY.class}" width="100%" height="100%">`)
-  //}, 3000)
+function crateCherry() {
+  var location = getEmptyCell()
+  if (!location) return
+  gBoard[location.i][location.j] = CHERTY
+
+  renderCell(location, `<img class ="${CHERTY.class}" src="${CHERTY.img}" alt="${CHERTY.class}" width="100%" height="100%">`)
 }
 
 function crateFood() {
@@ -152,4 +160,16 @@ function crateFood() {
 
 function crateFoods(count) {
   for (var i = 0; i < count; i++) crateFood()
+}
+
+function crateSuperFoodInStart() {
+  var location
+  for (var i = 0; i < 4; i++) {
+    if (i === 0) location = { i: 1, j: 1 }
+    if (i === 1) location = { i: gBoard.length - 2, j: 1 }
+    if (i === 2) location = { i: 1, j: gBoard.length - 2 }
+    if (i === 3) location = { i: gBoard.length - 2, j: gBoard.length - 2 }
+    gBoard[location.i][location.j] = SUPERFOOD
+    renderCell(location, `<img class ="${SUPERFOOD.class}" src="${SUPERFOOD.img}" alt="${SUPERFOOD.class}" width="100%" height="100%">`)
+  }
 }

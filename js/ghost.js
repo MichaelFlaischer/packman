@@ -50,6 +50,7 @@ function moveGhost(ghost) {
     moveGhost(ghost)
     return
   }
+
   if (nextCell.class === 'ghost') {
     moveGhost(ghost)
     return
@@ -64,7 +65,7 @@ function moveGhost(ghost) {
       for (var i = 0; i < gGhosts.length; i++) {
         if (gGhosts[i].id === ghost.id) {
           gBoard[ghost.location.i][ghost.location.j] = ghost.currCellContent
-          var percentSize = cellContent === FOOD ? 40 : 100
+          var percentSize = gGhosts[i].currCellContent === FOOD ? 40 : 100
 
           renderCell(
             ghost.location,
@@ -76,6 +77,12 @@ function moveGhost(ghost) {
           gBackGroundAudio.play()
           setTimeout(() => {
             createGhost(gBoard)
+            renderCell(
+              gGhosts[gGhosts.length].location,
+              `<img class ="${gGhosts[gGhosts.length].class}" src="${gGhosts[gGhosts.length].imgSuper}" alt="${
+                gGhosts[gGhosts.length].class
+              }" width="100%" height="100%" style="filter: hue-rotate(${gGhosts[gGhosts.length].color}deg);">`
+            )
           }, 3000)
           return
         }
