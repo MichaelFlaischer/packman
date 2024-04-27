@@ -13,7 +13,6 @@ const gGame = {
 var gBoard
 var gIntervalSuperFood
 var gIntervalFood
-
 function onInit() {
   gBoard = buildBoard()
 }
@@ -27,6 +26,8 @@ function startGame() {
   gGame.isOn = true
   gIntervalSuperFood = setInterval(crateSuperFood, 15000)
   gIntervalFood = setInterval(crateFood, 2000)
+  var gBackGroundAudio = new Audio('sound/backGround.wav')
+  gBackGroundAudio.play()
 }
 function restartGame() {
   gGhosts = []
@@ -95,6 +96,8 @@ function gameOver() {
 
   const elBoard = document.querySelector('.board')
   if (!isFoodIngame()) {
+    var gBackGroundAudio = new Audio('sound/win.mp3')
+    gBackGroundAudio.play()
     elBoard.innerHTML = '<div>Victory!!</div>'
   } else {
     elBoard.innerHTML = '<div>Game Over!</div>'

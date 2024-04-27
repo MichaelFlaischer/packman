@@ -23,12 +23,17 @@ function onMovePacman(ev) {
 
   if (nextCell === WALL) return
   if (nextCell.class === 'ghost') {
-    if (!PACMAN.isSuper) gameOver()
-    else {
+    if (!PACMAN.isSuper) {
+      var gBackGroundAudio = new Audio('sound/pacman_death.wav')
+      gBackGroundAudio.play()
+      gameOver()
+    } else {
       for (var i = 0; i < gGhosts.length; i++) {
         if (gGhosts[i].id === nextCell.id) {
           gBoard[nextLocation.i][nextLocation.j] = nextCell.currCellContent
           gGhosts.splice(i, 1)
+          var gBackGroundAudio = new Audio('sound/pacman_eatghost.wav')
+          gBackGroundAudio.play()
 
           setTimeout(() => {
             createGhost(gBoard)
@@ -47,6 +52,8 @@ function onMovePacman(ev) {
       )
     }
     toggleSuperMode()
+    var gBackGroundAudio = new Audio('sound/pacman_intermission.wav')
+    gBackGroundAudio.play()
     setTimeout(() => {
       PACMAN.isSuper = false
       toggleSuperMode()
@@ -62,6 +69,8 @@ function onMovePacman(ev) {
   renderCell(PACMAN.location, `<img class ="${PACMAN.class} ${elPacman.classList[1]}" src="${PACMAN.img}" alt="${PACMAN.class}" width="100%" height="100%">`)
 
   if (nextCell === FOOD) {
+    var gBackGroundAudio = new Audio('sound/eatFood.wav')
+    gBackGroundAudio.play()
     updateScore(1)
     if (!isFoodIngame()) gameOver()
   }
