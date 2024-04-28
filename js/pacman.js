@@ -99,7 +99,7 @@ function onMovePacman(ev) {
   }
 
   // Handle collision with cherry
-  if (nextCell === CHERTY) {
+  if (nextCell === CHERRY) {
     var gBackGroundAudio = new Audio('sound/pacman_eatfruit.wav')
     gBackGroundAudio.play()
     updateScore(10)

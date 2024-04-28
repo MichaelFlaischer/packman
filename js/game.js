@@ -126,7 +126,9 @@ function gameOver() {
   clearInterval(gIntervalGhosts)
   clearInterval(gIntervalFood)
   clearInterval(gIntervalCherry)
+  clearInterval(gIntervalSuperFood)
   clearInterval(gIntervalTime)
+  clearInterval(gIntervalGhostsNew)
   gGame.isOn = false
   const elBtnStart = document.querySelector('.startBtn')
   elBtnStart.innerText = 'Play Again!'
