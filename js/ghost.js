@@ -1,22 +1,34 @@
 'use strict'
 
+// Array to store ghost objects
 var gGhosts = []
+
+// Variable to track the ID of the next ghost
 var gNextId = 0
+
+// Interval for moving ghosts
 var gIntervalGhosts
 
+// Function to create ghosts on the board
 function createGhosts(board, count) {
+  // Clear the ghosts array
   gGhosts = []
+  // Create specified number of ghosts
   for (var i = 0; i < count; i++) {
     createGhost(board)
   }
-
+  // Clear previous interval and set a new one for moving ghosts
   if (gIntervalGhosts) clearInterval(gIntervalGhosts)
   gIntervalGhosts = setInterval(moveGhosts, 1000)
 }
 
-function createGhost(board) {
+// Function to create a single ghost
+function createGhost(board = gBoard) {
+  // Get an empty cell for the ghost's location
   var ghostLocation = getEmptyCell()
+  // Generate a random color for the ghost
   var randColor = Math.floor(Math.random() * 360 + 1)
+  // Define the ghost object
   const ghost = {
     id: gNextId,
     location: { i: ghostLocation.i, j: ghostLocation.j },
@@ -28,9 +40,11 @@ function createGhost(board) {
   }
   gNextId++
   gGhosts.push(ghost)
+  // Update the board with the ghost's position
   board[ghost.location.i][ghost.location.j] = ghost
 }
 
+// Function to move all ghosts
 function moveGhosts() {
   for (var i = 0; i < gGhosts.length; i++) {
     const ghost = gGhosts[i]
@@ -38,7 +52,9 @@ function moveGhosts() {
   }
 }
 
+// Function to move a single ghost
 function moveGhost(ghost) {
+  // Get the direction of movement
   const moveDiff = getMoveDiff()
   const nextLocation = {
     i: ghost.location.i + moveDiff.i,
@@ -46,24 +62,31 @@ function moveGhost(ghost) {
   }
   const nextCell = gBoard[nextLocation.i][nextLocation.j]
 
+  // Handle collision with walls
   if (nextCell === WALL) {
     moveGhost(ghost)
     return
   }
 
+  // Handle collision with other ghosts
   if (nextCell.class === 'ghost') {
     moveGhost(ghost)
     return
   }
+
+  // Handle collision with Pacman
   if (nextCell === PACMAN) {
     if (!PACMAN.isSuper) {
+      // If Pacman is not in super mode, game over
       var gBackGroundAudio = new Audio('sound/pacman_death.wav')
       gBackGroundAudio.play()
       gameOver()
       return
     } else {
+      // If Pacman is in super mode, eat the ghost
       for (var i = 0; i < gGhosts.length; i++) {
         if (gGhosts[i].id === ghost.id) {
+          // Remove the ghost from the board and the ghosts array
           gBoard[ghost.location.i][ghost.location.j] = ghost.currCellContent
           var percentSize = gGhosts[i].currCellContent === FOOD ? 40 : 100
 
@@ -75,6 +98,8 @@ function moveGhost(ghost) {
           gGhosts.splice(i, 1)
           var gBackGroundAudio = new Audio('sound/pacman_eatghost.wav')
           gBackGroundAudio.play()
+          // Increase the score and respawn the ghost after 3 seconds
+          updateScore(50)
           setTimeout(() => {
             createGhost(gBoard)
             renderCell(
@@ -104,6 +129,7 @@ function moveGhost(ghost) {
   ghost.location = nextLocation
   gBoard[nextLocation.i][nextLocation.j] = ghost
 
+  // Render the ghost on the board
   if (PACMAN.isSuper) {
     renderCell(
       ghost.location,
@@ -117,6 +143,7 @@ function moveGhost(ghost) {
   }
 }
 
+// Function to get the movement direction for a ghost
 function getMoveDiff() {
   const randNum = getRandomIntInclusive(1, 4)
 
@@ -132,6 +159,7 @@ function getMoveDiff() {
   }
 }
 
+// Function to toggle super mode for ghosts
 function toggleSuperMode() {
   var ghosts = document.querySelectorAll('ghost')
   for (var i = 0; i < ghosts.length; i++) {
