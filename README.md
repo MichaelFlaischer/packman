@@ -18,6 +18,7 @@ Welcome to the Pacman Game! This is a classic arcade game where you control Pacm
 - Eating ghosts in super mode: If Pacman eats a ghost while in super mode, you earn 50 points.
 - Winning the game: If you eat all the food dots and cherries on the board, you win the game.
 - Losing the game: The game ends if Pacman collides with a ghost while not in super mode.
+- Bonus points: Every second left on the clock when you win gives you an additional 100,000 / time points.
 
 ## Development
 

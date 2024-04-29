@@ -20,7 +20,7 @@ function openReadmePopup() {
 
   ## Introduction
   
-  Welcome to the Pacman Game! This is a classic arcade game where you control Pacman, the yellow character, and your goal is to eat all the food on the board while avoiding ghosts. Special items like cherries and superfood appear at regular intervals to enhance the gameplay.
+  Welcome to the Pacman Game! This is a classic arcade game where you control Pacman, the yellow character, and your goal is to eat all the food on the board while avoiding ghosts. If Pacman eats a ghost while in super mode, the ghost disappears temporarily, and you earn points.
   
   ## How to Play
   
@@ -36,23 +36,19 @@ function openReadmePopup() {
   - Eating ghosts in super mode: If Pacman eats a ghost while in super mode, you earn 50 points.
   - Winning the game: If you eat all the food dots and cherries on the board, you win the game.
   - Losing the game: The game ends if Pacman collides with a ghost while not in super mode.
-  
-  ## Timing of Item Appearance
-  
-  - Regular food dots and cherries will appear periodically on the board to maintain resources.
-  - Ghosts will appear at regular intervals, with additional ghosts spawning every minute to increase the challenge.
-  - Keep an eye on the clock to plan your movements and capitalize on appearing items.
+  - Bonus points: Every second left on the clock when you win gives you an additional 100,000 / time points.
   
   ## Development
   
-  This Pacman game was developed using HTML, CSS, and JavaScript. The game logic is implemented using JavaScript, while HTML and CSS are used for the user interface and styling.
+  This Pacman game was developed using HTML, CSS, and JavaScript.
+  The game logic is implemented using JavaScript, while HTML and CSS are used for the user interface and styling.
   The game board is generated dynamically, and Pacman and ghosts move according to the player's input.
   
   ## Credits
   
   This Pacman game was created by Michael Flaischer. It is inspired by the classic arcade game Pacman developed by Namco.
   
-  Enjoy playing Pacman!  
+  Enjoy playing Pacman!   
     `
 
   // Open a new window with README text

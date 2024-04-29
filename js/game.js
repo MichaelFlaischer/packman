@@ -54,7 +54,8 @@ function startGame() {
 // Function to restart the game
 function restartGame() {
   // Reset game variables and intervals
-  gTimePlay = 0
+  gTimePlay = -1
+  updateTime()
   gGhosts = []
   gNextId = 0
   clearInterval(gIntervalGhosts)
@@ -91,7 +92,7 @@ function buildBoard() {
 
 // Function to render the game board
 function renderBoard(board) {
-  var strHTML = '<span class="score"></span><span class="time"></span>  '
+  var strHTML = ''
   for (var i = 0; i < board.length; i++) {
     strHTML += '<tr>'
     for (var j = 0; j < board[0].length; j++) {
@@ -118,7 +119,7 @@ function updateScore(diff) {
   } else {
     gGame.score += diff
   }
-  document.querySelector('span.score').innerText = 'Score:\n ' + gGame.score + '\n'
+  document.querySelector('span.score').innerText = 'Score: ' + gGame.score + '\n'
 }
 
 // Function to handle game over
@@ -138,6 +139,7 @@ function gameOver() {
   if (!isFoodIngame()) {
     var gBackGroundAudio = new Audio('sound/win.mp3')
     gBackGroundAudio.play()
+    updateScore(parseInt(gGame.score + 100000 / gTimePlay))
     elBoard.innerHTML = `<div>Victory!! the score you got: ${gGame.score}</div>`
   } else {
     elBoard.innerHTML = `<div>Game Over! the score you got: ${gGame.score}</div>`
@@ -221,5 +223,5 @@ function crateSuperFoodInStart() {
 function updateTime() {
   const timeDiv = document.querySelector('.time')
   gTimePlay++
-  timeDiv.textContent = 'Time: \n ' + gTimePlay + '\n'
+  timeDiv.textContent = 'Time: ' + gTimePlay + '\n'
 }

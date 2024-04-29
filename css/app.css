@@ -2,20 +2,20 @@ body {
   background-color: black;
   color: white;
   text-align: center;
+  background-image: url('background.jpg');
+  background-size: cover;
 }
 
 .board-container {
   margin: auto;
 }
-
+table {
+  background-color: black;
+}
 .cell {
   font-size: 1.5em;
   width: 2em;
   height: 2em;
-}
-
-.superFoodActive {
-  src: 'icons/whiteGhost.png';
 }
 
 .rotateDown {
